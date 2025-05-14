@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Startup Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      background-color: black; 
+    }
+    
+    .hero-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .hero-image {
+      width: 100%;
+      height: 75vh; 
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(1.1) contrast(1.1); 
+    }
+    
+    .hero-content {
+      padding: 40px 20px;
+      text-align: center;
+      max-width: 600px;
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+    
+    .tagline {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    
+    .subtext {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    
+    .disclaimer {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-top: 30px;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00D09C;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-container">
+    <!-- Replace with your actual image path -->
+    <img class="hero-image" src="image1.jpg" alt="Startup Dashboard">
+    
+    <div class="hero-content">
+      <h1>FUEL YOUR<br>STARTUP</h1>
+      <div class="login-section" style="text-align: center; padding: 20px 0;">
+        <a href="login.html" style="background-color: #238636; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none;">
+          Login
+        </a>
+        <a href="register.html" style="background-color: #007acc; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none; margin-left: 10px;">
+          Register
+        </a>
+      </div>
+      
+      <p class="tagline">Track funding, valuations, and growth</p>
+      <p class="subtext">No noise. Just liftoff.</p>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value">100%</div>
+          <div>Funded and Flying</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">Your idea</div>
+          <div>in motion</div>
+        </div>
+      </div>
+      
+      <p class="disclaimer">All metrics represent our startup community's pulse. Data powered by contributors & creators.
+
+      </p>
+    </div>
+  </div>
+  <section class="carousel-section">
+    <div class="carousel-container">
+  
+      <!-- Tile 1: Functional - Investor Match Tool -->
+      <div class="carousel-tile">
+        <img src="image3.jpg" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>Investor Match Tool</h2>
+          <p>Find your best-fit investor in under 60 seconds. Smart filters. Live data.</p>
+          <a href="#" class="tile-btn">Try Now</a>
+        </div>
+      </div>
+  
+      <!-- Tile 2: Quote/Vibe -->
+      <div class="carousel-tile">
+        <img src="image4..jpg" alt="Startup Vibes">
+        <div class="tile-content">
+          <h2>"Startups don't fail. They just pivot harder."</h2>
+          <p>Fuel your fire. Fail forward. Iterate smarter.</p>
+        </div>
+      </div>
+  
+      <!-- Tile 3: Functional - Funding Round Tracker -->
+      <div class="carousel-tile">
+        <img src="image5.jpg" alt="Funding Round Tracker">
+        <div class="tile-content">
+          <h2>Funding Round Tracker</h2>
+          <p>View, manage, and update funding rounds with a single click.</p>
+          <a href="#" class="tile-btn">Explore Tracker</a>
+        </div>
+      </div>
+  
+      <!-- Tile 4: Advice Tip -->
+      <div class="carousel-tile">
+        <img src="image6.jpg" alt="Startup Advice">
+        <div class="tile-content">
+          <h2>Tip: ₹5 Cr Raised? Keep ₹1 Cr for Operations.</h2>
+          <p>Don’t burn fast. Run lean. Scale with clarity.</p>
+        </div>
+      </div>
+  
+      <!-- Tile 5: Vibe/Quote -->
+      <div class="carousel-tile">
+        <img src="image7.jpg" alt="Startup Energy">
+        <div class="tile-content">
+          <h2>"Your ₹0 to ₹1 Cr story begins here."</h2>
+          <p>Backed by data. Driven by grit. Engineered to win.</p>
+        </div>
+      </div>
+  
+    </div>
+  </section>
+  
+  <!-- CSS Styles (Can be added in a separate stylesheet) -->
+  <style>
+    .carousel-section {
+      width: 100vw;
+      height: 100vh;
+      overflow-x: hidden;
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+    }
+  
+    .carousel-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      width: 95vw;
+      height: 85vh;
+    }
+  
+    .carousel-tile {
+      flex: 0 0 80vw;
+      height: 100%;
+      margin: 0 1rem;
+      scroll-snap-align: center;
+      background: #1a1a1a;
+      border-radius: 24px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+      overflow: hidden;
+      position: relative;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  
+    .carousel-tile img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 1;
+    }
+  
+    .tile-content {
+    z-index: 2;
+    padding: 2rem;
+    background: none; /* Removes gradient background */
+     }
+  
+     .tile-content h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+      font-weight: 800; /* was probably normal or 600 */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8); /* pop out against images */
+     }
+     .tile-content p {
+       font-size: 1.15rem;
+        color: #e0e0e0;
+        font-weight: 500;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.7); /* optional but helps */
+     }
+  
+    .tile-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #14b8a6;
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  
+    .tile-btn:hover {
+      background: #0ea5e9;
+    }
+  </style>
+  <title>Startup Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d1117;
+      color: #c9d1d9;
+    }
+    header {
+      padding: 2rem;
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 2px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 1rem;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 2rem 0 1rem;
+      border-bottom: 1px solid #30363d;
+      padding-bottom: 0.5rem;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 6px;
+      border: none;
+      background-color: #161b22;
+      color: #c9d1d9;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin-left: 0.5rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #238636;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2ea043;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #30363d;
+    }
+    .actions button {
+      margin-right: 0.5rem;
+      background-color: #0d1117;
+      border: 1px solid #238636;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    .actions button:hover {
+      background-color: #238636;
+      color: white;
+    }
+    .recent-activity {
+      background-color: #161b22;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 20px rgba(63, 185, 80, 0.5);
+    }
+    .recent-item {
+      margin-bottom: 0.5rem;
+    }
+    .recent-item span {
+      display: block;
+    }
+    .recent-item .amount {
+      color: #3fb950;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .footer {
+      background-color: #161b22;
+      padding: 4rem 2rem; /* Increased padding for a more luxurious feel */
+      margin-top: 3rem;
+      color: #c9d1d9;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .footer::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 10px; /* Light glow size */
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(0, 255, 255, 0.7), rgba(255, 255, 255, 0.6));
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.8); /* Glowing light effect */
+      z-index: -1;
+    }
+    .investors {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .investor-card {
+      background-color: #0d1117;
+      padding: 1rem;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>Fuel Your Startup</header>
+  <div class="container">
+    <div class="recent-activity">
+      <div class="section-title">📊 Recent Funding Activity <span style="float:right; font-size: 0.9rem; color:#58a6ff; cursor:pointer">View All</span></div>
+      <div class="recent-item">
+        <span>Byju's – Series A round led by Sequoia India on Sep 1, 2015</span>
+        <span class="amount">₹72.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Zomato – Series B round led by SoftBank on Apr 22, 2015</span>
+        <span class="amount">₹296.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Paytm – Series B round led by SoftBank on Nov 5, 2014</span>
+        <span class="amount">₹200.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Ola – Series B round led by Tiger Global on Oct 14, 2014</span>
+        <span class="amount">₹320.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Flipkart – Series C round led by Tiger Global on Aug 20, 2012</span>
+        <span class="amount">₹1200.0 Cr</span>
+      </div>
+    </div>
+
+    <div class="section-title">Your Startups</div>
+    <input type="text" id="search" placeholder="Search startups..." oninput="filterStartups()">
+    <input type="text" id="newStartup" placeholder="Add a new startup...">
+    <button onclick="addStartup()">Add</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Startup</th>
+          <th>Industry</th>
+          <th>Founded</th>
+          <th>Funding</th>
+          <th>Valuation</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="startupList">
+        <!-- populated by JS -->
+      </tbody>
+    </table>
+
+    <div class="footer">
+        <h3>Investor Highlights</h3>
+        <div class="investors">
+          <div class="investor-card">
+            <strong>Sequoia Capital India</strong><br>
+            Focus: Tech Startups<br>
+            📞 +91-22-4004-0000
+          </div>
+          <div class="investor-card">
+            <strong>Tiger Global</strong><br>
+            Focus: E-commerce, SaaS<br>
+            📞 +91-22-4012-2200
+          </div>
+          <div class="investor-card">
+            <strong>SoftBank Vision Fund</strong><br>
+            Focus: Scaling Startups<br>
+            📞 +91-11-4070-9090
+          </div>
+        </div>
+        <p style="margin-top: 2rem; font-style: italic; font-size: 1.1rem; color: #8b949e;">"The best way to predict the future is to create it."</p>
+      </div>
+    </div>
+    <script>
+      const API_URL = "http://127.0.0.1:5000/api";
+
+      async function fetchStartups() {
+        const response = await fetch(`${API_URL}/startups`);
+        const startups = await response.json();
+        displayStartups(startups);
+      }
+
+      async function addStartup() {
+        const name = document.getElementById("newStartup").value;
+        if (name) {
+          await fetch(`${API_URL}/startups`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name })
+          });
+          document.getElementById("newStartup").value = "";
+          fetchStartups();
+        }
+      }
+
+      async function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const response = await fetch(`${API_URL}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
+        const result = await response.json();
+        alert(result.message);
+      }
+
+      const startups = [
+        ["Flipkart", "E-commerce", 2007, "₹1,60,00,00,000", "₹3,760,00,00,000", "Exited"],
+        ["Paytm", "Fintech", 2010, "₹250,00,00,000", "₹5500,00,00,000", "Active"],
+        ["Zomato", "Food Delivery", 2008, "₹296,00,00,000", "₹5400,00,00,000", "Active"],
+        ["Ola", "Transportation", 2010, "₹320,00,00,000", "₹7300,00,00,000", "Active"],
+        ["Byju's", "Edtech", 2011, "₹72,00,00,000", "₹22000,00,00,000", "Active"]
+      ];
+  
+      function displayStartups(list) {
+        const tbody = document.getElementById("startupList");
+        tbody.innerHTML = "";
+        list.forEach((s) => {
+          tbody.innerHTML += `
+          <tr>
+            <td>${s[0]}</td>
+            <td>${s[1]}</td>
+            <td>${s[2]}</td>
+            <td>${s[3]}</td>
+            <td>${s[4]}</td>
+            <td>${s[5]}</td>
+            <td class="actions">
+              <button>View</button>
+              <button>Edit</button>
+            </td>
+          </tr>`;
+        });
+      }
+  
+     function filterStartups() {
+      const q = document.getElementById("search").value.toLowerCase();
+      const filtered = startups.filter(s => s[0].toLowerCase().includes(q));
+      displayStartups(filtered);
+    }
+
+    // Initial fetch
+    fetchStartups();
+  </script>
+</body>
+</html>

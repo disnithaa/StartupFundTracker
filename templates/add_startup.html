@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Startup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="addstartup">
+    <div class="container" style="padding-top: 2rem;">
+        <h1 style="color: #c9d1d9; text-align: center; margin-bottom: 2rem;">Add New Startup</h1>
+        <form method="POST" action="{{ url_for('add_startup') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            
+            <div class="form-group">
+                <label for="name">Startup Name*</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="industry">Industry*</label>
+                <select id="industry" name="industry" required>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Fintech">Fintech</option>
+                    <option value="Edtech">Edtech</option>
+                    <option value="Food Delivery">Food Delivery</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="founded_year">Founded Year*</label>
+                <input type="number" id="founded_year" name="founded_year" min="1900" max="2024" required>
+            </div>
+
+            <div class="form-group">
+                <label for="headquarters">Headquarters*</label>
+                <input type="text" id="headquarters" name="headquarters" required>
+            </div>
+
+            <div class="form-group">
+                <label for="total_funding">Total Funding (₹)*</label>
+                <input type="text" id="total_funding" name="total_funding" placeholder="₹0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="valuation">Valuation (₹)*</label>
+                <input type="text" id="valuation" name="valuation" placeholder="₹0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status*</label>
+                <select id="status" name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Acquired">Acquired</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn"onclick="addStartup()">Add Startup</button>
+                <a href="{{ url_for('dashboard') }}" class="cancel-btn">Cancel</a>
+            </div></div>
+        </form>
+    </div>
+</body>
+</html>

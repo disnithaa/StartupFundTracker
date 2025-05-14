@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Startup Funding Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">Startup Funding Tracker</div>
+    <div class="nav-user">
+      <span class="welcome-text">Welcome, {{ current_user.name }}</span>
+      <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="hero-container">
+    <img class="hero-image" src="{{ url_for('static', filename='images/hero.jpg') }}" alt="Startup Dashboard">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+    <div class="hero-content">
+      <h1>FUEL YOUR<br>STARTUP</h1>
+      <div class="section-title">
+        <p class="tagline">Track funding, valuations, and growth</p>
+        <p class="subtext">No noise. Just liftoff.</p>
+        
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-value">100%          </div>
+            <div style=" color:#c9d1d9;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Funded and Flying</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">Your idea</div>
+            <div style=" color:#c9d1d9;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">in motion</div>
+          </div>
+        </div>
+        
+        <p class="disclaimer">All metrics represent our startup community's pulse. Data powered by contributors & creators.
+
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section class="carousel-section">
+    <div class="carousel-container">
+  
+      <!-- Tile 1: Functional - Investor Match Tool -->
+      <div class="carousel-tile">
+        <img src="{{ url_for('static', filename='images/investor-match.jpg') }}" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>Investor Match Tool</h2>
+          <p style="color:#e0e0e0;">Find your best-fit investor in under 60 seconds. Smart filters. Live data.</p>
+          <a href="#" class="tile-btn">Try Now</a>
+        </div>
+      </div>
+  
+      <!-- Tile 2: Quote/Vibe -->
+      <div class="carousel-tile">
+        <img src="{{ url_for('static', filename='images/investor2.jpg') }}" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>"Startups don't fail. They just pivot harder."</h2>
+          <p>Fuel your fire. Fail forward. Iterate smarter.</p>
+        </div>
+      </div>
+  
+      <!-- Tile 3: Functional - Funding Round Tracker -->
+      <div class="carousel-tile">
+        <img src="{{ url_for('static', filename='images/investor3.jpg') }}" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>Funding Round Tracker</h2>
+          <p>View, manage, and update funding rounds with a single click.</p>
+          <a href="#" class="tile-btn">Explore Tracker</a>
+        </div>
+      </div>
+  
+      <!-- Tile 4: Advice Tip -->
+      <div class="carousel-tile">
+        <img src="{{ url_for('static', filename='images/investor4.jpg') }}" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>Tip: ₹5 Cr Raised? Keep ₹1 Cr for Operations.</h2>
+          <p>Don’t burn fast. Run lean. Scale with clarity.</p>
+        </div>
+      </div>
+  
+      <!-- Tile 5: Vibe/Quote -->
+      <div class="carousel-tile">
+        <img src="{{ url_for('static', filename='images/investor5.jpg') }}" alt="Investor Match Tool">
+        <div class="tile-content">
+          <h2>"Your ₹0 to ₹1 Cr story begins here."</h2>
+          <p>Backed by data. Driven by grit. Engineered to win.</p>
+        </div>
+      </div>
+  
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="recent-activity">
+      <div class="section-title">📊 Recent Funding Activity <span style="float:right; font-size: 0.9rem; color:#58a6ff; cursor:pointer">View All</span></div>
+      <div class="recent-item">
+        <span>Byju's – Series A round led by Sequoia India on Sep 1, 2015</span>
+        <span class="amount">₹72.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Zomato – Series B round led by SoftBank on Apr 22, 2015</span>
+        <span class="amount">₹296.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Paytm – Series B round led by SoftBank on Nov 5, 2014</span>
+        <span class="amount">₹200.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Ola – Series B round led by Tiger Global on Oct 14, 2014</span>
+        <span class="amount">₹320.0 Cr</span>
+      </div>
+      <div class="recent-item">
+        <span>Flipkart – Series C round led by Tiger Global on Aug 20, 2012</span>
+        <span class="amount">₹1200.0 Cr</span>
+      </div>
+    </div>
+
+    <div class="section-title">Your Startups</div>
+    <div class="startup-controls" style="display: flex;align-items: center;justify-content: center;">
+        
+        <a href="{{ url_for('add_startup') }}" class="add-startup-btn" >Click here to add your startup</a>
+    </div>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Startup</th>
+          <th>Industry</th>
+          <th>Founded</th>
+          <th>Funding</th>
+          <th>Valuation</th>
+          <th>Status</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Default Startups -->
+        {% for startup in default_startups %}
+        <tr>
+          <td>{{ startup.name }}</td>
+          <td>{{ startup.industry }}</td>
+          <td>{{ startup.founded_year }}</td>
+          <td>{{ startup.total_funding }}</td>
+          <td>{{ startup.valuation }}</td>
+          <td><span class="status-{{ startup.status|lower }}">{{ startup.status }}</span></td>
+        </tr>
+        {% endfor %}
+
+        <!-- User Added Startups -->
+        {% for startup in startups %}
+        <tr>
+          <td>{{ startup.name }}</td>
+          <td>{{ startup.industry }}</td>
+          <td>{{ startup.founded_year }}</td>
+          <td>{{ startup.total_funding }}</td>
+          <td>{{ startup.valuation }}</td>
+          <td><span class="status-{{ startup.status|lower }}">{{ startup.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <!-- Modal Container -->
+    <div id="startupModal" class="startup-modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalStartupName"></h2>
+          <span id="modalStatus" class="status-badge"></span>
+        </div>
+        <div class="modal-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Industry</label>
+              <span id="modalIndustry"></span>
+            </div>
+            <div class="info-item">
+              <label>Founded</label>
+              <span id="modalFounded"></span>
+            </div>
+            <div class="info-item funding">
+              <label>Total Funding</label>
+              <span id="modalFunding"></span>
+            </div>
+            <div class="info-item valuation">
+              <label>Valuation</label>
+              <span id="modalValuation"></span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="close-btn" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+        <h3>Investor Highlights</h3>
+        <div class="investors">
+          <div class="investor-card">
+            <strong>Sequoia Capital India</strong><br>
+            Focus: Tech Startups<br>
+            📞 +91-22-4004-0000
+          </div>
+          <div class="investor-card">
+            <strong>Tiger Global</strong><br>
+            Focus: E-commerce, SaaS<br>
+            📞 +91-22-4012-2200
+          </div>
+          <div class="investor-card">
+            <strong>SoftBank Vision Fund</strong><br>
+            Focus: Scaling Startups<br>
+            📞 +91-11-4070-9090
+          </div>
+        </div>
+        <p style="margin-top: 2rem; font-style: italic; font-size: 1.1rem; color: #8b949e;">"The best way to predict the future is to create it."</p>
+      </div></div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
