@@ -28,7 +28,7 @@ app = Flask(__name__,
 # Basic configuration
 app.config.update(
     SECRET_KEY=os.environ.get('SECRET_KEY', secrets.token_hex(32)),
-    SQLALCHEMY_DATABASE_URI='mysql://root:Rachana%4005@localhost/StartupFundingTracker',
+    SQLALCHEMY_DATABASE_URI='mysql://root:bhanu@localhost/StartupFundingTracker',
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     SESSION_TYPE='filesystem',
     PERMANENT_SESSION_LIFETIME=timedelta(days=7),
