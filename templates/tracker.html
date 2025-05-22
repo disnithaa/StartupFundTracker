@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    <meta charset="UTF-8">
+    <title>Funding Round Tracker</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0d1117 60%, #161b22 100%);
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .tracker-container {
+            max-width: 1200px;
+            margin: 0 auto 3rem auto;
+            padding: 2rem 1rem 3rem 1rem;
+            background: rgba(22, 27, 34, 0.98);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(35, 134, 54, 0.08);
+        }
+        h1 {
+            color: #58a6ff;
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 2.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        h2 {
+            color: #3fb950;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        table {
+            width: 100%;
+            margin: 1.5rem 0 2.5rem 0;
+            border-collapse: collapse;
+            background: #161b22;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(63, 185, 80, 0.10);
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+        th {
+            background: #21262d;
+            color: #58a6ff;
+            font-weight: 700;
+            font-size: 1.08rem;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover {
+            background: rgba(88, 166, 255, 0.07);
+            transition: background 0.2s;
+        }
+        .section-divider {
+            border: none;
+            border-top: 2px solid #30363d;
+            margin: 2.5rem 0 2rem 0;
+        }
+        form {
+            width: 100%;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        input[type="text"] {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background: #161b22;
+            color: #c9d1d9;
+            font-size: 1rem;
+            width: 320px;
+            transition: border 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: #58a6ff;
+            outline: none;
+        }
+        button[type="submit"] {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #238636, #2ea043);
+            color: white;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #2ea043, #238636);
+        }
+        a.back-link {
+            display: block;
+            width: fit-content;
+            margin: 2.5rem auto 0 auto;
+            padding: 0.75rem 2rem;
+            background: #21262d;
+            color: #58a6ff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(88, 166, 255, 0.08);
+        }
+        a.back-link:hover {
+            background: #30363d;
+            color: #fff;
+        }
+        .no-results {
+            text-align: center;
+            color: #8b949e;
+            font-style: italic;
+            padding: 1.5rem 0;
+        }
+        @media (max-width: 900px) {
+            .tracker-container {
+                padding: 1rem 0.5rem 2rem 0.5rem;
+            }
+            table, form {
+                width: 100%;
+            }
+            th, td {
+                padding: 0.7rem;
+                font-size: 0.97rem;
+            }
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tracker-container">
+        <h1>Funding Round Tracker</h1>
+
+        
+        
+        <!-- MOST VALUED STARTUPS -->
+<h2>Most Valued Startups</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Industry</th>
+      <th>Total Funding</th>
+      <th>Valuation</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Byju's</td>
+      <td>Edtech</td>
+      <td>₹72,00,00,000</td>
+      <td>₹22000,00,00,000</td>
+      <td>Active</td>
+    </tr>
+    <tr>
+      <td>PhonePe</td>
+      <td>Fintech</td>
+      <td>₹420,00,00,000</td>
+      <td>₹12000,00,00,000</td>
+      <td>Active</td>
+    </tr>
+    <tr>
+      <td>Swiggy</td>
+      <td>Food Delivery</td>
+      <td>₹450,00,00,000</td>
+      <td>₹10700,00,00,000</td>
+      <td>Active</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- Industry Wise Startup Count -->
+<h2>Industry Wise Startup Count</h2>
+<table>
+  <thead>
+    <tr><th>Industry</th><th>Number of Startups</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Fintech</td><td>4</td></tr>
+    <tr><td>Edtech</td><td>2</td></tr>
+    <tr><td>Food Delivery</td><td>2</td></tr>
+    <tr><td>E-commerce</td><td>2</td></tr>
+    <tr><td>Transportation</td><td>1</td></tr>
+    <tr><td>Gaming</td><td>1</td></tr>
+  </tbody>
+</table>
+
+<h2>Least Valued Startups</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Industry</th>
+      <th>Total Funding</th>
+      <th>Valuation</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Paper Boat</td>
+      <td>Food Delivery</td>
+      <td>₹100000</td>
+      <td>₹20000000</td>
+      <td>Active</td>
+    </tr>
+    <tr>
+      <td>Unacademy</td>
+      <td>Edtech</td>
+      <td>₹150,00,00,000</td>
+      <td>₹3440,00,00,000</td>
+      <td>Active</td>
+    </tr>
+    <tr>
+      <td>Flipkart</td>
+      <td>E-commerce</td>
+      <td>₹1,60,00,00,000</td>
+      <td>₹3,760,00,00,000</td>
+      <td>Exited</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Industry Count</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Industry</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Food Delivery</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Fintech</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>Edtech</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>Gaming</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>E-commerce</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Transportation</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+
+
+    </div>
+</body>
+</html>
+

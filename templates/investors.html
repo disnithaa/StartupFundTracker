@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor Match Tool - StartupFundTracker</title>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #14b8a6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #8b949e;
+        }
+
+        /* Form Layout Improvements */
+        .add-investor-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #14b8a6;
+        }
+
+        .section {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+        }
+
+        .search-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #8b949e;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 25px;
+            border: 1px solid #30363d;
+            background: #161b22;
+            color: #c9d1d9;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #238636;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2ea043;
+        }
+
+        .btn-danger {
+            background-color: #da3633;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #f85149;
+        }
+
+        .investors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .investor-card {
+            background: #161b22;
+            border-radius: 24px;
+            padding: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .investor-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .investor-card h3 {
+            color: #14b8a6;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .investor-card p {
+            margin: 0.5rem 0;
+            color: #8b949e;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                grid-template-columns: 1fr;
+            }
+            .investors-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Investor Match Tool</h1>
+
+        <!-- Dashboard Section -->
+        <div class="section dashboard">
+            <h2>Investment Overview</h2>
+            <div class="dashboard-stats">
+                <div class="stat-box">
+                    <span class="stat-number" id="totalInvestors">0</span>
+                    <span class="stat-label">Total Investors</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" id="seedInvestors">0</span>
+                    <span class="stat-label">Seed Stage</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" id="seriesInvestors">0</span>
+                    <span class="stat-label">Series Funding</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number" id="growthInvestors">0</span>
+                    <span class="stat-label">Growth Stage</span>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Search Section -->
+        <div class="section">
+            <div class="search-section">
+                <div class="form-group">
+                    <label for="searchInput">Search Investors</label>
+                    <input type="text" id="searchInput" placeholder="Search by name or firm..." oninput="searchInvestors()">
+                </div>
+                <div class="form-group">
+                    <label for="typeFilter">Filter by Stage</label>
+                    <select id="typeFilter" onchange="searchInvestors()">
+                        <option value="">All Stages</option>
+                        <option value="Seed">Seed</option>
+                        <option value="Series A">Series A</option>
+                        <option value="Series B">Series B</option>
+                        <option value="Series C">Series C</option>
+                        <option value="Growth">Growth</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Add New Investor</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="newName">Investor Name*</label>
+                    <input type="text" id="newName" placeholder="Enter investor name" required>
+                </div>
+                <div class="form-group">
+                    <label for="newFirm">Investment Firm</label>
+                    <input type="text" id="newFirm" placeholder="Enter firm name (optional)">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="newType">Investment Stage*</label>
+                    <select id="newType" required>
+                        <option value="">Select Stage</option>
+                        <option value="Seed">Seed</option>
+                        <option value="Series A">Series A</option>
+                        <option value="Series B">Series B</option>
+                        <option value="Series C">Series C</option>
+                        <option value="Growth">Growth</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="investorType">Investor Type*</label>
+                    <select id="investorType" required>
+                        <option value="">Select Type</option>
+                        <option value="Angel">Angel</option>
+                        <option value="Venture Capital">Venture Capital</option>
+                        <option value="Private Equity">Private Equity</option>
+                        <option value="Corporate">Corporate</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="minInvestment">Minimum Investment (₹)*</label>
+                    <input type="number" id="minInvestment" placeholder="Enter minimum investment" required>
+                </div>
+                <div class="form-group">
+                    <label for="maxInvestment">Maximum Investment (₹)*</label>
+                    <input type="number" id="maxInvestment" placeholder="Enter maximum investment" required>
+                </div>
+            </div>
+
+            <button onclick="addInvestor()" class="btn-primary">Add Investor</button>
+        </div>
+        
+        <!-- Investors Grid -->
+        <div class="investors-grid" id="investorsGrid">
+            <!-- Investors will be dynamically added here -->
+        </div>
+    </div>
+
+    <script src="static/js/investors.js"></script>
+</body>
+</html>

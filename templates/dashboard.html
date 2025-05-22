@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Startup Funding Tracker</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
   <nav class="navbar">
@@ -53,14 +54,13 @@
   <section class="carousel-section">
     <div class="carousel-container">
   
-      <!-- Tile 1: Functional - Investor Match Tool -->
-      <div class="carousel-tile">
+      <!-- Tile 1: Functional - Investor Match Tool -->     <div class="carousel-tile">
         <img src="{{ url_for('static', filename='images/investor-match.jpg') }}" alt="Investor Match Tool">
         <div class="tile-content">
           <h2>Investor Match Tool</h2>
-          <p style="color:#e0e0e0;">Find your best-fit investor in under 60 seconds. Smart filters. Live data.</p>
-          <a href="#" class="tile-btn">Try Now</a>
-        </div>
+          <p>Find your best-fit investor in under 60 seconds. Smart filters. Live data.</p>
+          <a href="{{ url_for('investors_page') }}" class="tile-btn">Try Now</a>
+         </div>
       </div>
   
       <!-- Tile 2: Quote/Vibe -->
@@ -78,7 +78,7 @@
         <div class="tile-content">
           <h2>Funding Round Tracker</h2>
           <p>View, manage, and update funding rounds with a single click.</p>
-          <a href="#" class="tile-btn">Explore Tracker</a>
+          <a href="{{ url_for('tracker') }}" class="tile-btn">Explore Tracker</a>
         </div>
       </div>
   
@@ -129,9 +129,11 @@
     </div>
 
     <div class="section-title">Your Startups</div>
-    <div class="startup-controls" style="display: flex;align-items: center;justify-content: center;">
-        
-        <a href="{{ url_for('add_startup') }}" class="add-startup-btn" >Click here to add your startup</a>
+    <div class="startup-controls" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+        <div class="search-container">
+            <input type="text" id="startup-search" placeholder="Search startups..." class="search-input">
+        </div>
+        <a href="{{ url_for('add_startup') }}" class="add-startup-btn">Add Startup</a>
     </div>
     
     <table>
@@ -143,23 +145,10 @@
           <th>Funding</th>
           <th>Valuation</th>
           <th>Status</th>
-          
+          <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Default Startups -->
-        {% for startup in default_startups %}
-        <tr>
-          <td>{{ startup.name }}</td>
-          <td>{{ startup.industry }}</td>
-          <td>{{ startup.founded_year }}</td>
-          <td>{{ startup.total_funding }}</td>
-          <td>{{ startup.valuation }}</td>
-          <td><span class="status-{{ startup.status|lower }}">{{ startup.status }}</span></td>
-        </tr>
-        {% endfor %}
-
-        <!-- User Added Startups -->
+      <tbody id="startup-tbody">
         {% for startup in startups %}
         <tr>
           <td>{{ startup.name }}</td>
@@ -168,6 +157,14 @@
           <td>{{ startup.total_funding }}</td>
           <td>{{ startup.valuation }}</td>
           <td><span class="status-{{ startup.status|lower }}">{{ startup.status }}</span></td>
+          <td class="actions-cell">
+            <button onclick="openUpdateModal('{{ startup.name }}', '{{ startup.total_funding }}', '{{ startup.valuation }}')" class="details-btn">
+                <i class="fas fa-edit"></i> Update Details
+            </button>
+            <button onclick="confirmDelete('{{ startup.name }}')" class="delete-btn">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -206,6 +203,45 @@
       </div>
     </div>
 
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal" style="display: none;">
+        <div class="modal-content update-modal">
+            <div class="modal-header">
+                <h2>Update Startup Details</h2>
+                <span class="close" onclick="closeUpdateModal()">&times;</span>
+            </div>
+            <form id="updateForm" onsubmit="handleUpdate(event)">
+                <input type="hidden" id="startupName">
+                <div class="form-group">
+                    <label>Current Funding</label>
+                    <input type="text" id="currentFunding" disabled>
+                </div>
+                <div class="form-group">
+                    <label>New Funding Amount</label>
+                    <input type="text" id="newFunding" required 
+                           placeholder="₹00,00,00,000"
+                           pattern="^₹[0-9,]+$"
+                           title="Enter amount in format: ₹00,00,00,000">
+                </div>
+                <div class="form-group">
+                    <label>Current Valuation</label>
+                    <input type="text" id="currentValuation" disabled>
+                </div>
+                <div class="form-group">
+                    <label>New Valuation</label>
+                    <input type="text" id="newValuation" required 
+                           placeholder="₹00,00,00,000"
+                           pattern="^₹[0-9,]+$"
+                           title="Enter amount in format: ₹00,00,00,000">
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="update-btn">Update Details</button>
+                    <button type="button" onclick="closeUpdateModal()" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="footer">
         <h3>Investor Highlights</h3>
         <div class="investors">
@@ -227,6 +263,271 @@
         </div>
         <p style="margin-top: 2rem; font-style: italic; font-size: 1.1rem; color: #8b949e;">"The best way to predict the future is to create it."</p>
       </div></div>
+
+    <style>
+        .search-container {
+            flex: 1;
+            max-width: 300px;
+            margin-right: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background-color: #161b22;
+            color: #c9d1d9;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #238636;
+            box-shadow: 0 0 0 3px rgba(35, 134, 54, 0.3);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content.update-modal {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 20px;
+            width: 400px;
+            border: 1px solid #30363d;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #c9d1d9;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            color: #8b949e;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .update-btn, .cancel-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .update-btn:hover {
+            background: #2ea043;
+        }
+
+        .cancel-btn:hover {
+            background: #424a53;
+        }
+
+        input:disabled {
+            background: #161b22;
+            color: #8b949e;
+            cursor: not-allowed;
+        }
+
+        .update-btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cancel-btn {
+            background: #30363d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            background: #161b22;
+            color: #c9d1d9;
+        }
+
+        .details-btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            min-width: 130px;
+            justify-content: center;
+        }
+
+        .details-btn:hover {
+            background: #2ea043;
+            transform: translateY(-1px);
+        }
+
+        .details-btn i {
+            font-size: 14px;
+        }
+
+        .delete-btn {
+            background: #d73a49;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            transition: background 0.2s;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .delete-btn:hover {
+            background: #b92534;
+        }
+
+        .actions-cell {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        document.getElementById('startup-search').addEventListener('input', function(e) {
+            const searchValue = e.target.value.toLowerCase();
+            const tbody = document.getElementById('startup-tbody');
+            const rows = tbody.getElementsByTagName('tr');
+            const seenNames = new Set();
+
+            // Hide all rows first
+            Array.from(rows).forEach(row => row.style.display = 'none');
+
+            // Show only first occurrence of each startup name
+            Array.from(rows).forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const industry = row.cells[1].textContent.toLowerCase();
+                
+                if ((name.includes(searchValue) || industry.includes(searchValue)) && !seenNames.has(name)) {
+                    row.style.display = '';
+                    seenNames.add(name);
+                }
+            });
+        });
+
+        function openUpdateModal(name, currentFunding, currentValuation) {
+            document.getElementById('updateModal').style.display = 'flex';
+            document.getElementById('startupName').value = name;
+            document.getElementById('currentFunding').value = currentFunding;
+            document.getElementById('currentValuation').value = currentValuation;
+            document.getElementById('newFunding').value = '';
+            document.getElementById('newValuation').value = '';
+        }
+
+        function closeUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+        }
+
+        async function handleUpdate(event) {
+            event.preventDefault();
+            const name = document.getElementById('startupName').value;
+            const newFunding = document.getElementById('newFunding').value;
+            const newValuation = document.getElementById('newValuation').value;
+
+            try {
+                const response = await fetch('/api/startup/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        total_funding: newFunding,
+                        valuation: newValuation
+                    })
+                });
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to update startup details');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to update startup details');
+            }
+        }
+
+        function confirmDelete(name) {
+            if (confirm(`Are you sure you want to delete "${name}"?`)) {
+                fetch('/api/startup/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: name })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Failed to delete startup');
+                    }
+                })
+                .catch(() => alert('Failed to delete startup'));
+            }
+        }
+    </script>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

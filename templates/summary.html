@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Startup Summary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Startup Summary</h1>
+    <h2>Most Funded Startups</h2>
+    <table>
+        <tr><th>Name</th><th>Industry</th><th>Total Funding</th><th>Valuation</th><th>Status</th></tr>
+        {% for s in most_funded %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.industry }}</td>
+            <td>{{ s.total_funding }}</td>
+            <td>{{ s.valuation }}</td>
+            <td>{{ s.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Least Funded Startups</h2>
+    <table>
+        <tr><th>Name</th><th>Industry</th><th>Total Funding</th><th>Valuation</th><th>Status</th></tr>
+        {% for s in least_funded %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.industry }}</td>
+            <td>{{ s.total_funding }}</td>
+            <td>{{ s.valuation }}</td>
+            <td>{{ s.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Most Valued Startups</h2>
+    <table>
+        <tr><th>Name</th><th>Industry</th><th>Total Funding</th><th>Valuation</th><th>Status</th></tr>
+        {% for s in most_valued %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.industry }}</td>
+            <td>{{ s.total_funding }}</td>
+            <td>{{ s.valuation }}</td>
+            <td>{{ s.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Startups by Industry</h2>
+    <table>
+        <tr><th>Industry</th><th>Startup Count</th></tr>
+        {% for row in industry_counts %}
+        <tr>
+            <td>{{ row.industry }}</td>
+            <td>{{ row.startup_count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Search Startups by Name</h2>
+    <form method="get">
+        <input type="text" name="search" value="{{ search_term or '' }}" placeholder="Enter startup name">
+        <button type="submit">Search</button>
+    </form>
+    {% if like_results %}
+    <table>
+        <tr><th>Name</th><th>Industry</th><th>Founded</th><th>Funding</th><th>Valuation</th><th>Status</th></tr>
+        {% for s in like_results %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.industry }}</td>
+            <td>{{ s.founded_year }}</td>
+            <td>{{ s.total_funding }}</td>
+            <td>{{ s.valuation }}</td>
+            <td>{{ s.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</body>
+</html>

@@ -70,7 +70,7 @@ function displayStartups(startups) {
     if (!tbody) return;
 
     tbody.innerHTML = '';
-    
+
     startups.forEach(startup => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -80,8 +80,16 @@ function displayStartups(startups) {
             <td>${startup.total_funding || 'N/A'}</td>
             <td>${startup.valuation || 'N/A'}</td>
             <td><span class="status-${startup.status?.toLowerCase()}">${startup.status || 'N/A'}</span></td>
-            <td class="actions">
-                <button onclick="viewStartup('${encodeURIComponent(startup.name)}')" class="view-btn">View</button>
+            <td class="actions-cell">
+                <button onclick="viewStartup('${encodeURIComponent(startup.name)}')" class="view-btn blue-view-btn">
+                    View
+                </button>
+                <button onclick="openUpdateModal('${startup.name}', '${startup.total_funding}', '${startup.valuation}')" class="details-btn">
+                    <i class="fas fa-edit"></i> Update Details
+                </button>
+                <button onclick="confirmDelete('${startup.name}')" class="delete-btn">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
             </td>
         `;
         tbody.appendChild(row);
@@ -159,6 +167,21 @@ function handleFormSubmit(e) {
     const formData = new FormData(this);
     const isLogin = this.id === 'loginForm';
     
+function confirmDelete(startupName) {
+    if (confirm(`Are you sure you want to delete "${startupName}"?`)) {
+        fetch('/delete_startup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ name: startupName })
+        }).then(response => {
+            if (response.ok) window.location.reload();
+            else alert("Failed to delete startup.");
+        });
+    }
+}
     // Client-side validation
     if (!formData.get('email') || !formData.get('password') || (!isLogin && !formData.get('username'))) {
         alert('Please fill in all required fields');

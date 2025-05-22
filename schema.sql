@@ -117,18 +117,20 @@ CREATE TABLE ExitStrategies (
 TRUNCATE TABLE Startups;
 
 INSERT INTO Startups (name, industry, founded_year, headquarters, total_funding, valuation, status) VALUES 
+('CRED', 'Fintech', 2018, 'Bengaluru, India', '₹290,00,00,000', '₹6800,00,00,000', 'Active'),
+('Unacademy', 'Edtech', 2015, 'Bengaluru, India', '₹150,00,00,000', '₹3440,00,00,000', 'Active'),
+('Razorpay', 'Fintech', 2014, 'Bengaluru, India', '₹260,00,00,000', '₹7500,00,00,000', 'Active'),
+('Ola', 'Transportation', 2010, 'Bengaluru, India', '₹320,00,00,000', '₹7300,00,00,000', 'Active'),
 ('Flipkart', 'E-commerce', 2007, 'Bengaluru, India', '₹1,60,00,00,000', '₹3,760,00,00,000', 'Exited'),
 ('Paytm', 'Fintech', 2010, 'Noida, India', '₹250,00,00,000', '₹5500,00,00,000', 'Active'),
 ('Zomato', 'Food Delivery', 2008, 'Gurgaon, India', '₹296,00,00,000', '₹5400,00,00,000', 'Active'),
-('Ola', 'Transportation', 2010, 'Bengaluru, India', '₹320,00,00,000', '₹7300,00,00,000', 'Active'),
 ('Byju''s', 'Edtech', 2011, 'Bengaluru, India', '₹72,00,00,000', '₹22000,00,00,000', 'Active'),
 ('Swiggy', 'Food Delivery', 2014, 'Bengaluru, India', '₹450,00,00,000', '₹10700,00,00,000', 'Active'),
 ('Nykaa', 'E-commerce', 2012, 'Mumbai, India', '₹180,00,00,000', '₹2300,00,00,000', 'Active'),
 ('Dream11', 'Gaming', 2008, 'Mumbai, India', '₹340,00,00,000', '₹8000,00,00,000', 'Active'),
-('PhonePe', 'Fintech', 2015, 'Bengaluru, India', '₹420,00,00,000', '₹12000,00,00,000', 'Active'),
-('Unacademy', 'Edtech', 2015, 'Bengaluru, India', '₹150,00,00,000', '₹3440,00,00,000', 'Active'),
-('Razorpay', 'Fintech', 2014, 'Bengaluru, India', '₹260,00,00,000', '₹7500,00,00,000', 'Active'),
-('CRED', 'Fintech', 2018, 'Bengaluru, India', '₹290,00,00,000', '₹6800,00,00,000', 'Active');
+('PhonePe', 'Fintech', 2015, 'Bengaluru, India', '₹420,00,00,000', '₹12000,00,00,000', 'Active');
+
+select * from investors;
 
 -- Insert Indian Investors (and major global investors in India) - Original 10 + 2 new
 INSERT INTO Investors (name, investment_firm, investor_type) VALUES 
@@ -172,7 +174,7 @@ INSERT INTO StartupInvestors (startup_id, investor_id, investment_amount) VALUES
 (4, 5, 3000000.00),
 (4, 4, 20000000.00),
 (5, 5, 5000000.00),
-(11, 6, 1500000.00),                                     -- New investment 1
+(11, 6, 1500000.00),                                     
 (12, 11, 8000000.00);                                   -- New investment 2
 
 -- Insert Founders (real Indian founders) - Original 10 + 2 new
@@ -384,5 +386,45 @@ ALTER TABLE users
     MODIFY COLUMN password_hash VARCHAR(255) NOT NULL,
     MODIFY COLUMN role ENUM('Admin', 'Finance', 'Viewer') NOT NULL DEFAULT 'Viewer',
     MODIFY COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- View: Most Funded Startups (top 5)
+CREATE OR REPLACE VIEW MostFundedStartups AS
+SELECT name, industry, total_funding, valuation, status
+FROM Startups
+ORDER BY 
+  CAST(REPLACE(REPLACE(REPLACE(total_funding, '₹', ''), ',', ''), '.', '') AS UNSIGNED) DESC
+LIMIT 5;
+
+-- View: Least Funded Startups (bottom 5)
+CREATE OR REPLACE VIEW LeastFundedStartups AS
+SELECT name, industry, total_funding, valuation, status
+FROM Startups
+ORDER BY 
+  CAST(REPLACE(REPLACE(REPLACE(total_funding, '₹', ''), ',', ''), '.', '') AS UNSIGNED) ASC
+LIMIT 5;
+
+-- View: Most Valued Startups (top 5)
+CREATE OR REPLACE VIEW MostValuedStartups AS
+SELECT name, industry, total_funding, valuation, status
+FROM Startups
+ORDER BY 
+  CAST(REPLACE(REPLACE(REPLACE(valuation, '₹', ''), ',', ''), '.', '') AS UNSIGNED) ASC
+LIMIT 5;
+
+select * from MostValuedStartups;
+-- Example: Group by industry, count startups per industry
+CREATE OR REPLACE VIEW IndustryStartupCounts AS
+SELECT industry, COUNT(*) AS startup_count
+FROM Startups
+GROUP BY industry
+ORDER BY startup_count DESC;
+
+-- Example: Search startups by name using LIKE
+SELECT * FROM Startups WHERE name LIKE '%Paytm%';
+
+ALTER TABLE Startups
+MODIFY COLUMN total_funding BIGINT,
+MODIFY COLUMN valuation BIGINT;
+
 
 select * from users;

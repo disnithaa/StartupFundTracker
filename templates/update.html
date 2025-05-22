@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Startup - SFT</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="update-page">
+    <nav class="navbar">
+        <div class="nav-brand">Startup Funding Tracker</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="update-container">
+        <h1>Update Startup Details</h1>
+        <div class="startup-info">
+            <h2>{{ startup.name }}</h2>
+            <p class="industry">{{ startup.industry }}</p>
+        </div>
+
+        <form method="POST" class="update-form">
+            <div class="form-group">
+                <label>Current Funding</label>
+                <input type="text" value="{{ startup.total_funding }}" disabled>
+            </div>
+            <div class="form-group">
+                <label>New Funding Amount</label>
+                <input type="text" name="total_funding" 
+                       placeholder="₹00,00,00,000"
+                       pattern="^₹[0-9,]+$"
+                       required>
+            </div>
+            <div class="form-group">
+                <label>Current Valuation</label>
+                <input type="text" value="{{ startup.valuation }}" disabled>
+            </div>
+            <div class="form-group">
+                <label>New Valuation</label>
+                <input type="text" name="valuation" 
+                       placeholder="₹00,00,00,000"
+                       pattern="^₹[0-9,]+$"
+                       required>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="update-btn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{{ url_for('dashboard') }}" class="cancel-btn">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .update-page {
+            background: #0d1117;
+            min-height: 100vh;
+        }
+
+        .update-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #161b22;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .startup-info {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .startup-info h2 {
+            color: #c9d1d9;
+            margin: 0;
+        }
+
+        .industry {
+            color: #8b949e;
+            margin-top: 5px;
+        }
+
+        .update-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #c9d1d9;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .update-btn, .cancel-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .update-btn {
+            background: #238636;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #30363d;
+            color: #c9d1d9;
+        }
+
+        .update-btn:hover {
+            background: #2ea043;
+        }
+
+        .cancel-btn:hover {
+            background: #424a53;
+        }
+    </style>
+</body>
+</html>

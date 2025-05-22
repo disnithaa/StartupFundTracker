@@ -77,17 +77,15 @@
   </style>
 </head>
 <body>
-  <div class="hero-container">
-    <!-- Replace with your actual image path -->
-    <img class="hero-image" src="image1.jpg" alt="Startup Dashboard">
+  <div class="hero-container">    <!-- Hero image -->
+    <img class="hero-image" src="{{ url_for('static', filename='images/hero.jpg') }}" alt="Startup Dashboard">
     
     <div class="hero-content">
       <h1>FUEL YOUR<br>STARTUP</h1>
-      <div class="login-section" style="text-align: center; padding: 20px 0;">
-        <a href="login.html" style="background-color: #238636; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none;">
+      <div class="login-section" style="text-align: center; padding: 20px 0;">        <a href="{{ url_for('login') }}" style="background-color: #238636; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none;">
           Login
         </a>
-        <a href="register.html" style="background-color: #007acc; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none; margin-left: 10px;">
+        <a href="{{ url_for('register') }}" style="background-color: #007acc; color: white; padding: 1rem 2rem; border-radius: 25px; cursor: pointer; font-size: 1.2rem; text-decoration: none; margin-left: 10px;">
           Register
         </a>
       </div>
@@ -116,17 +114,18 @@
   
       <!-- Tile 1: Functional - Investor Match Tool -->
       <div class="carousel-tile">
-        <img src="image3.jpg" alt="Investor Match Tool">
+        <img src="{{ url_for('static', filename='images/investor-match.jpg') }}" alt="Investor Match Tool">
         <div class="tile-content">
           <h2>Investor Match Tool</h2>
           <p>Find your best-fit investor in under 60 seconds. Smart filters. Live data.</p>
-          <a href="#" class="tile-btn">Try Now</a>
+          <button onclick="window.location.href='investors.html'" class="tile-btn try-now-button">Try Now</button>
+          
         </div>
       </div>
   
       <!-- Tile 2: Quote/Vibe -->
       <div class="carousel-tile">
-        <img src="image4..jpg" alt="Startup Vibes">
+        <img src="{{ url_for('static', filename='images/startup-vibes.jpg') }}" alt="Startup Vibes">
         <div class="tile-content">
           <h2>"Startups don't fail. They just pivot harder."</h2>
           <p>Fuel your fire. Fail forward. Iterate smarter.</p>
@@ -134,14 +133,14 @@
       </div>
   
       <!-- Tile 3: Functional - Funding Round Tracker -->
-      <div class="carousel-tile">
-        <img src="image5.jpg" alt="Funding Round Tracker">
-        <div class="tile-content">
-          <h2>Funding Round Tracker</h2>
-          <p>View, manage, and update funding rounds with a single click.</p>
-          <a href="#" class="tile-btn">Explore Tracker</a>
-        </div>
-      </div>
+<div class="carousel-tile">
+  <img src="{{ url_for('static', filename='images/funding-tracker.jpg') }}" alt="Funding Round Tracker">
+  <div class="tile-content">
+    <h2>Funding Round Tracker</h2>
+    <p>View, manage, and update funding rounds with a single click.</p>
+    <a href="{{ url_for('tracker') }}" class="tile-btn">Explore Tracker</a>
+  </div>
+</div>
   
       <!-- Tile 4: Advice Tip -->
       <div class="carousel-tile">
