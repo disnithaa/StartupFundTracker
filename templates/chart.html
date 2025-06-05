@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Statistics - StartupFundTracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #14b8a6;
+            text-align: center;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(255,255,255,0.05);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: #14b8a6;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #14b8a6;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #8b949e;
+        }
+
+        canvas {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Startup Analytics Dashboard</h1>
+
+        <div class="stats-summary">
+            <div class="stat-box">
+                <div class="stat-number" id="totalRounds">0</div>
+                <div class="stat-label">Total Funding Rounds</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalInvestors">0</div>
+                <div class="stat-label">Active Investors</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="avgValuation">₹0</div>
+                <div class="stat-label">Average Valuation</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="successfulExits">0</div>
+                <div class="stat-label">Successful Exits</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">Funding Rounds Distribution</div>
+                <canvas id="fundingChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Top Startup Valuations</div>
+                <canvas id="valuationChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Investor Type Distribution</div>
+                <canvas id="investorTypeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Funding Sources Breakdown</div>
+                <canvas id="fundingSourceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize stats
+        document.getElementById('totalRounds').textContent = "10";
+        document.getElementById('totalInvestors').textContent = "10";
+        document.getElementById('avgValuation').textContent = "₹6800,00,00,000";
+        document.getElementById('successfulExits').textContent = "1";
+
+        // Common chart configuration
+        Chart.defaults.color = '#8b949e';
+        Chart.defaults.borderColor = '#30363d';
+
+        // Sample data from database (FundingRounds table)
+        const fundingRoundData = {
+            labels: ['Seed', 'Series A', 'Series B', 'Series C', 'IPO'],
+            datasets: [{
+                label: 'Number of Rounds',
+                data: [1, 5, 4, 1, 0], // Actual counts from your database
+                backgroundColor: '#14b8a6',
+                borderRadius: 8
+            }]
+        };
+
+        // Sample data from StartupValuations table
+        const valuationData = {
+            labels: ['Byju\'s', 'PhonePe', 'Swiggy', 'Ola', 'Zomato', 'CRED', 'Razorpay'],
+            datasets: [{
+                label: 'Valuation (₹ Crores)',
+                data: [22000, 12000, 10700, 7300, 5400, 6800, 7500],
+                backgroundColor: '#14b8a6',
+                borderRadius: 8
+            }]
+        };
+
+        // Sample data from Investors table
+        const investorTypeData = {
+            labels: ['Angel', 'Venture Capital', 'Private Equity', 'Corporate'],
+            datasets: [{
+                data: [2, 4, 3, 1], // Actual counts from your database
+                backgroundColor: ['#14b8a6', '#0ea5e9', '#8b5cf6', '#f43f5e']
+            }]
+        };
+
+       
+        const fundingSourceData = {
+            labels: ['Sequoia India', 'SoftBank', 'Tiger Global', 'Accel India', 'Others'],
+            datasets: [{
+                label: 'Total Investment (Crores INR)',
+                data: [130, 250, 150, 300, 200], // Actual amounts from your database
+                backgroundColor: ['#14b8a6', '#0ea5e9', '#8b5cf6', '#f43f5e', '#84cc16']
+            }]
+        };
+
+        // Create the charts
+        new Chart(document.getElementById('fundingChart'), {
+            type: 'bar',
+            data: fundingRoundData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Rounds'
+                        }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('valuationChart'), {
+            type: 'bar',
+            data: valuationData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valuation (₹ Crores)'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '₹' + context.parsed.y.toLocaleString('en-IN') + ' Cr';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('investorTypeChart'), {
+            type: 'doughnut',
+            data: investorTypeData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('fundingSourceChart'), {
+            type: 'pie',
+            data: fundingSourceData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

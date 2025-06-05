@@ -249,7 +249,7 @@ def logout():
 @login_required
 def dashboard():
     try:
-        # Only show startups from the database (do not add default_startups if deleted in DB)
+        # Only show startups from the database
         db_startups = Startup.query.all()
         startups = []
         for s in db_startups:
@@ -261,10 +261,11 @@ def dashboard():
                 "valuation": s.valuation,
                 "status": s.status
             })
-        # Do NOT show default startups at all
+        tables = get_all_tables()  # Get table names for sidebar
         return render_template('dashboard.html', 
                             user=current_user,
-                            startups=startups)
+                            startups=startups,
+                            tables=tables)
     except Exception as e:
         app.logger.error(f"Dashboard error: {str(e)}")
         flash('Error loading dashboard', 'error')
@@ -305,7 +306,7 @@ def search_investors():
 
 
 @app.route('/tracker')
-@login_required  # If authentication is required
+@login_required
 def tracker():
     try:
         # Your tracker data fetching logic here
@@ -507,11 +508,8 @@ def tracker_page():
 @app.route('/api/tracker', methods=['GET'])
 @login_required
 def api_tracker():
-    # Ensure the following columns exist in your Startups table:
-    # name, industry, total_funding, valuation, status
-    # If your schema uses different names, update the queries below accordingly.
     def row_to_dict(row):
-        mapping = row._mapping  # Correct way to extract dict-like access
+        mapping = row._mapping
         return {
             'name': mapping['name'],
             'industry': mapping['industry'],
@@ -570,13 +568,13 @@ def api_tracker():
 @login_required
 def add_startup():
     if request.method == 'POST':
+        # Check if startup with same name already exists
         try:
-            # Check if startup with same name already exists
             existing_startup = Startup.query.filter_by(name=request.form['name']).first()
             if existing_startup:
                 flash('A startup with this name already exists!', 'error')
                 return render_template('add_startup.html')
-
+            
             startup = Startup(
                 name=request.form['name'],
                 industry=request.form['industry'],
@@ -602,8 +600,8 @@ def add_startup():
 @login_required
 def update_startup_page(name):
     startup = Startup.query.filter_by(name=name).first_or_404()
-    
     if request.method == 'POST':
+        startup.total_funding = request.form.get('total_funding')
         try:
             startup.total_funding = request.form.get('total_funding')
             startup.valuation = request.form.get('valuation')
@@ -613,23 +611,122 @@ def update_startup_page(name):
         except Exception as e:
             db.session.rollback()
             flash('Error updating startup', 'error')
+            return render_template('update.html', startup=startup)
     
     return render_template('update.html', startup=startup)
 
 @app.route('/investors')
 @login_required
 def investors_page():
+    csrf_token = generate_csrf()
+    return render_template('investors.html', csrf_token=csrf_token)
+
+# Add after database initialization section
+def get_all_tables():
+    """Get all table names from the database"""
     try:
-        return render_template('investors.html')
+        tables = []
+        # Get all tables from MySQL database
+        result = db.session.execute("""
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'StartupFundingTracker'
+        """)
+        for row in result:
+            table_name = row[0]
+            # Only include actual data tables, exclude system tables
+            if not table_name.startswith('_'):
+                tables.append(table_name)
+        return tables
     except Exception as e:
-        app.logger.error(f"Investors page error: {str(e)}")
-        flash('Error loading investors page', 'error')
+        app.logger.error(f"Error fetching tables: {str(e)}")
+        return []
+
+@app.context_processor
+def inject_tables():
+    """Make table names available to all templates"""
+    return dict(db_tables=get_all_tables())
+
+@app.route('/table/<table_name>')
+@login_required
+def view_table(table_name):
+    try:
+        # Validate table name
+        valid_tables = get_all_tables()
+        if table_name not in valid_tables:
+            flash('Invalid table name', 'error')
+            return redirect(url_for('dashboard'))
+            
+        # Fetch table data
+        result = db.session.execute(f"SELECT * FROM {table_name}")
+        columns = result.keys()
+        rows = result.fetchall()
+        
+        return render_template('table_view.html',
+                             table_name=table_name,
+                             columns=columns,
+                             rows=rows)
+    except Exception as e:
+        app.logger.error(f"Error viewing table {table_name}: {str(e)}")
+        flash(f'Error viewing table: {table_name}', 'error')
         return redirect(url_for('dashboard'))
+
 
 # Error handler for unauthorized access
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('login'))  # Changed from login_page
+
+@app.route('/chart')
+@login_required
+def chart():
+    try:
+        startups = Startup.query.all()
+        startup_data = []
+        for startup in startups:
+            startup_data.append({
+                'name': startup.name,
+                'industry': startup.industry,
+                'total_funding': startup.total_funding,
+                'valuation': startup.valuation
+            })
+        return render_template('chart.html', startup_data=startup_data)
+    except Exception as e:
+        app.logger.error(f"Chart error: {str(e)}")
+        flash('Error loading charts', 'error')
+        return redirect(url_for('dashboard'))
+
+@app.route('/api/investors/create', methods=['POST'])
+@login_required
+def create_investor():
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'investment_stage', 'investor_type']
+        if not all(field in data for field in required_fields):
+            return jsonify({'error': 'Missing required fields'}), 400
+
+        # Insert investor into database
+        db.session.execute("""
+            INSERT INTO investors (name, firm, investment_stage, investor_type, 
+                                 min_investment, max_investment)
+            VALUES (:name, :firm, :stage, :type, :min, :max)
+        """, {
+            'name': data['name'],
+            'firm': data.get('firm', ''),
+            'stage': data['investment_stage'],
+            'type': data['investor_type'],
+            'min': data['min_investment'],
+            'max': data['max_investment']
+        })
+        db.session.commit()
+        
+        return jsonify({'success': True}), 201
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f'Error creating investor: {str(e)}')
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,7 +3,7 @@ from datetime import timedelta
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev')
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:Rachana@05@localhost/StartupFundingTracker'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:bhanu@localhost/StartupFundingTracker'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_recycle': 3600,
